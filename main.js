@@ -15,7 +15,7 @@ function init() {
 
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 100000 );
 	camera.position.z = 100;
-	camera.position.y = 4000;
+	camera.position.y = 200;
 	// camera.position.x = 1000;
 	scene = new THREE.Scene();
 	particles = new Array();
@@ -98,7 +98,7 @@ function animate() {
 }
 var rotation = 0;
 function render() {
-	// camera.position.x += ( mouseX - camera.position.x ) * .05;
+	camera.position.x += ( mouseX - camera.position.x ) * .05;
 	rotation += 0.01;
 	camera.position.x = 200;
 	camera.position.y = Math.sin(rotation) * 200;
@@ -108,11 +108,18 @@ function render() {
 	for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
 		for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
 			particle = particles[ i++ ];
-			particle.position.x += Math.sin(particle.position.x) * Math.cos(particle.position.y);
+			var x = particle.position.x;
+			var y = particle.position.y;
+			var z = particle.position.z;
+
+			var d = ( Math.sin( ( ix + count ) ) -  Math.sin( ( iy + count ))) / 1.2;
+			particle.position.x = (particle.position.x) + d;
+			particle.position.y = (particle.position.y) + d;
+			particle.position.z = (particle.position.z) - d;
 			// var d = 1 / Math.sqrt(Math.pow(particle.position.x, 2) + Math.pow(particle.position.y, 2) + Math.pow(particle.position.z, 2));
 			// particle.position.x += d;
 			// particle.scale.x = particle.scale.y = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 8 +
-				// ( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 8;
+				( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 8;
 		}
 	}
 	renderer.render( scene, camera );
