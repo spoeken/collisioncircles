@@ -21,7 +21,7 @@ function init() {
 	particles = new Array();
 	var PI2 = Math.PI * 2;
 	var material = new THREE.SpriteMaterial( {
-		color: 0xffffff,
+		color: '#02C9C8',
 		program: function ( context ) {
 			context.beginPath();
 			context.arc( 0, 0, 0.5, 0, PI2, true );
@@ -42,15 +42,16 @@ function init() {
 			y *= d;
 			z *= d;
 
-			particle.position.x = x * 1000;
-			particle.position.y = y * 1000;
-			particle.position.z = z * 1000;
-			particle.scale.x = particle.scale.y = 30;
+			particle.position.x = x * 100;
+			particle.position.y = y * 100;
+			particle.position.z = z * 100;
+			particle.scale.x = particle.scale.y = 2;
+			console.log(particle);
 			scene.add( particle );
 		}
 	}
 
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({ alpha: true });
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
 
@@ -95,20 +96,23 @@ function animate() {
 	render();
 	// stats.update();
 }
-
+var rotation = 0;
 function render() {
-	camera.position.x += ( mouseX - camera.position.x ) * .05;
-	// camera.position.y += ( - mouseY - camera.position.y ) * .05;
-	camera.lookAt( scene.position );
+	// camera.position.x += ( mouseX - camera.position.x ) * .05;
+	rotation += 0.01;
+	camera.position.x = 200;
+	camera.position.y = Math.sin(rotation) * 200;
+	camera.position.z = Math.cos(rotation) * 200;
+	camera.lookAt( scene.position ); // the origin
 	var i = 0;
 	for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
 		for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
-			// particle = particles[ i++ ];
-			// particle.position.x += ( Math.sin( ( iy + count ) * 0.1 ) * (count/10) );
-			// particle.position.z += ( Math.cos( ( iy + count ) * 0.1 ) * (count/10) );
-			// particle.position.y += ( Math.cos( ( ix + count ) * 0.1 ) * Math.sin( ( iy + count ) * 0.1 ) * (count/10));
+			particle = particles[ i++ ];
+			particle.position.x += Math.sin(particle.position.x) * Math.cos(particle.position.y);
+			// var d = 1 / Math.sqrt(Math.pow(particle.position.x, 2) + Math.pow(particle.position.y, 2) + Math.pow(particle.position.z, 2));
+			// particle.position.x += d;
 			// particle.scale.x = particle.scale.y = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 8 +
-			// 	( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 8;
+				// ( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 8;
 		}
 	}
 	renderer.render( scene, camera );
