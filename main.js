@@ -1,6 +1,6 @@
 var THREE = require('three');
 
-var SEPARATION = 100, AMOUNTX = 20, AMOUNTY = 20;
+var SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
 var container, stats;
 var camera, scene, renderer;
 var particles, particle, count = 0;
@@ -42,9 +42,9 @@ function init() {
 			y *= d;
 			z *= d;
 
-			particle.position.x = x * 100;
-			particle.position.y = y * 100;
-			particle.position.z = z * 100;
+			particle.position.x = x;
+			particle.position.y = y;
+			particle.position.z = z;
 			particle.scale.x = particle.scale.y = 2;
 			console.log(particle);
 			scene.add( particle );
@@ -99,10 +99,10 @@ function animate() {
 var rotation = 0;
 function render() {
 	camera.position.x += ( mouseX - camera.position.x ) * .05;
-	rotation += 0.01;
-	camera.position.x = 200;
-	camera.position.y = Math.sin(rotation) * 200;
-	camera.position.z = Math.cos(rotation) * 200;
+	// rotation += 0.01;
+	// camera.position.x = 200;
+	// camera.position.y = Math.sin(rotation) * 200;
+	// camera.position.z = Math.cos(rotation) * 200;
 	camera.lookAt( scene.position ); // the origin
 	var i = 0;
 	for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
@@ -112,14 +112,16 @@ function render() {
 			var y = particle.position.y;
 			var z = particle.position.z;
 
-			var d = ( Math.sin( ( ix + count ) ) -  Math.sin( ( iy + count ))) / 1.2;
+			var d = ( Math.cos( ( ix ) ) -  Math.cos( ( iy ))) * 0.1;
+			var e = ( Math.cos( ( ix ) ) -  Math.sin( ( iy ))) * 0.1;
+			var f = ( Math.sin( ( ix ) ) -  Math.cos( ( iy ))) * 0.1;
 			particle.position.x = (particle.position.x) + d;
-			particle.position.y = (particle.position.y) + d;
-			particle.position.z = (particle.position.z) - d;
+			particle.position.y = (particle.position.y) + e;
+			particle.position.z = (particle.position.z) + f;
 			// var d = 1 / Math.sqrt(Math.pow(particle.position.x, 2) + Math.pow(particle.position.y, 2) + Math.pow(particle.position.z, 2));
 			// particle.position.x += d;
 			// particle.scale.x = particle.scale.y = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 8 +
-				( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 8;
+				// ( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 8;
 		}
 	}
 	renderer.render( scene, camera );
