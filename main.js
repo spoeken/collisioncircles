@@ -7,6 +7,7 @@ var particles, particle, count = 0;
 var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
+var startTime = Date.now();
 
 init();
 animate();
@@ -42,7 +43,7 @@ function init() {
 			particle.position.y = y;
 			particle.position.z = z;
 			particle.scale.x = particle.scale.y = 1;
-			console.log(particle);
+			// console.log(particle);
 			scene.add( particle );
 		}
 	}
@@ -93,7 +94,17 @@ function animate() {
 	// stats.update();
 }
 var rotation = 0;
+var gravity = 100000;
 function render() {
+	var now = Date.now();
+	var elapsed = now - startTime;
+	var slowDown = 0.3 - (elapsed / 100000);
+	if(slowDown < -0.3){
+		gravity = -100000;
+	} else if(slowDown > 0.3){
+		gravity = 100000;
+	}
+	console.log(slowDown);
 	camera.position.x += ( mouseX - camera.position.x ) * .05;
 	// rotation += 0.01;
 	// camera.position.x = 200;
@@ -108,9 +119,10 @@ function render() {
 			var y = particle.position.y;
 			var z = particle.position.z;
 
-			var d = ( Math.cos( ( ix ) ) -  Math.cos( ( iy ))) * 0.1;
-			var e = ( Math.cos( ( ix ) ) -  Math.sin( ( iy ))) * 0.1;
-			var f = ( Math.sin( ( ix ) ) -  Math.cos( ( iy ))) * 0.1;
+			var d = ( Math.cos( ( ix ) ) -  Math.cos( ( iy ))) * slowDown;
+			var e = ( Math.cos( ( ix ) ) -  Math.sin( ( iy ))) * slowDown;
+			var f = ( Math.sin( ( ix ) ) -  Math.cos( ( iy ))) * slowDown;
+
 			particle.position.x = (particle.position.x) + d;
 			particle.position.y = (particle.position.y) + e;
 			particle.position.z = (particle.position.z) + f;
