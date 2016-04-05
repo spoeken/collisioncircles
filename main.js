@@ -20,14 +20,10 @@ function init() {
 	scene = new THREE.Scene();
 	particles = new Array();
 	var PI2 = Math.PI * 2;
-	var material = new THREE.SpriteMaterial( {
-		color: '#02C9C8',
-		program: function ( context ) {
-			context.beginPath();
-			context.arc( 0, 0, 0.5, 0, PI2, true );
-			context.fill();
-		}
-	} );
+	var texture = new THREE.Texture( generateCircleTexture() );
+  	texture.needsUpdate = true; // important!
+
+	var material = new THREE.SpriteMaterial( {map: texture} );
 	var i = 0;
 	for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
 		for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
@@ -45,7 +41,7 @@ function init() {
 			particle.position.x = x;
 			particle.position.y = y;
 			particle.position.z = z;
-			particle.scale.x = particle.scale.y = 2;
+			particle.scale.x = particle.scale.y = 1;
 			console.log(particle);
 			scene.add( particle );
 		}
@@ -127,3 +123,20 @@ function render() {
 	renderer.render( scene, camera );
 	count += 0.1;
 }
+
+function generateCircleTexture() {
+    var PI2 = Math.PI * 2;
+    var canvas = document.createElement( 'canvas' );
+    canvas.width = 10;
+    canvas.height = 10;
+
+    var context = canvas.getContext( '2d' );
+    context.fillStyle = '#02C9C8';
+    context.beginPath();
+    context.arc( 5, 5, 5, 0, PI2, true );
+    context.fill();
+
+    return canvas;
+
+}
+
